@@ -10,10 +10,11 @@ public class Main {
         PersonService.createPerson(pessoa1);
 
 
-        List<Person> pessoas = PersonService.getPersons();
+        List<Person> pessoas = PersonService.readPersons();
 
        pessoas.forEach(System.out::println);
 
         PersonService.updatePerson(1, "victin", 28);
+        PersonService.deletePerson(5);
     }
 }

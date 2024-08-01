@@ -20,6 +20,7 @@ public class PersonService {
                 statement.setInt(2, person.getAge());
                 statement.executeUpdate();
                 System.out.println("Pessoa criada com sucesso!");
+            statement.close();
             conn.close();
 
         } catch (SQLException e){
@@ -27,7 +28,7 @@ public class PersonService {
         }
     }
 
-    public static List<Person> getPersons () throws Exception {
+    public static List<Person> readPersons() throws Exception {
         String SQL = "SELECT * FROM pessoas";
         List<Person> people = new ArrayList<>();
 
@@ -42,6 +43,8 @@ public class PersonService {
                 Person person = new Person(id, name, age);
                 people.add(person);
             }
+            statement.close();
+            rs.close();
             conn.close();
 
         }catch (SQLException e){
@@ -61,10 +64,28 @@ public class PersonService {
         statement.setInt(2, age);
         statement.setInt(3, id);
         statement.executeUpdate();
+        statement.close();
         conn.close();
         System.out.println("Pessoa alterada com sucesso");
     } catch (SQLException e) {
         System.out.println("Erro ao alterar a pessoa: " + e.getMessage());
     }
     }
+
+    public static void deletePerson(int id) throws Exception{
+        String SQL = "DELETE FROM pessoas where id = ?";
+
+        try{
+            Connection conn = DatabaseConnect.getConnection();
+            PreparedStatement statement = conn.prepareStatement(SQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+            System.out.printf("Usuário com id: %d removido com sucesso!", id);
+            statement.close();
+            conn.close();
+        }catch (SQLException exception){
+            System.out.println("Erro ao excluir usuário: " + exception.getMessage());
+        }
+    }
+
 }
